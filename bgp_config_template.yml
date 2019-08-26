@@ -1,0 +1,47 @@
+---
+
+- name: CPE_BGP&Loopback_Config
+  hosts: all
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+
+   - name: Loopback1
+     ios_config:
+      authorize: yes
+      parents : interface Loopback0
+      lines:
+       - ip address {{loop_address}} {{loop_mask}}
+
+   - name: Loopback2
+     ios_config:
+      authorize: yes
+      parents : interface Loopback1
+      lines:
+       - ip address {{loop1_address}} {{loop1_mask}}
+
+   - name: CPE_BGP_CONGIG
+     ios_config:
+      authorize: yes
+      parents : router bgp {{as_number}}
+      lines:
+       - redistribute connected route-map connected-to-bgp
+       - neighbor {{agg_ip_address}} remote-as {{agg_as}}
+       - neighbor {{agg_ip_address}} local-as {{cpe_as}} no-prepend replace-as
+       - neighbor {{agg_ip_address}} ebgp-multihop 2
+
+   - name: Route_Map1
+     ios_config:
+     authorize: yes
+      parents : route-map connected-to-bgp permit 10
+      lines:
+       - match interface Loopback0
+
+   - name: Route_Map2
+     ios_config:
+      authorize: yes
+      parents : route-map connected-to-bgp permit 20
+      lines:
+       - match interface Loopback1
+
