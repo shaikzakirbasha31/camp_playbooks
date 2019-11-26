@@ -1,7 +1,7 @@
 ---
 
 - name: SHOW VERSION
-  hosts: "172.16.12.3"
+  hosts: all
   gather_facts: false
   connection: network_cli
 
