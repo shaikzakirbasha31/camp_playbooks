@@ -2,16 +2,10 @@
 
 - name: SHOW VERSION
   hosts: host1
-  gather_facts: true
+  gather_facts: false
   connection: network_cli
 
   tasks:
     - name: run the command 'show version'
       ios_command:
         commands: show version
-
-  fail_when:
-      "ansible_net_model" != {{device_model}} or
-      "ansible_net_serialnum" != {{device_serial_num}} or 
-      "ansible_net_version" != {{device_image_version }}
-
