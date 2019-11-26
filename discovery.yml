@@ -2,7 +2,7 @@
 
 - name: SHOW VERSION
   hosts: all
-  gather_facts: false
+  gather_facts: true
   connection: network_cli
 
   tasks:
