@@ -1,15 +1,11 @@
 ---
-- name: Wormhole Team!
+
+- name: SHOW VERSION
   hosts: all
-  vars_files:
-    - "{{ var_file }}"
+  gather_facts: true
+  connection: network_cli
+
   tasks:
-
-  - name: Hello!
-    shell: echo "Hi! Welcome to wormhole team.{{pname}}, {{city}}, {{state}}"
-           
-    register: results
-  - set_fact:
-      myvalue: "{{ results.stdout | regex_search(regexp,'^TASK') }}"
-
-  - copy: content={{ find_output }} dest=/home/stack/wormhole/error.log
+    - name: run the command 'show version'
+      ios_command:
+        commands: show version

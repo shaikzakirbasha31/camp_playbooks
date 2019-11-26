@@ -1,11 +1,16 @@
 ---
 
 - name: SHOW VERSION
-  hosts: all
+  hosts: CPE-1
   gather_facts: true
   connection: network_cli
+  vars:
+   creds:
+     host: "{{ansible_host}}"
+     username: "{{ansible_user}}"
 
   tasks:
-    - name: run the command 'show version'
-      ios_command:
-        commands: show version
+    - ios_facts:
+        provider: "{{creds}}"
+    - debug:
+        var: ansible_net_model
