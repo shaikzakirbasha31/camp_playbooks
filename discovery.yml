@@ -1,7 +1,17 @@
 ---
-- name: Wormhole Team!
-  hosts: all
-  tasks:
 
-  - name: Hello!
-    shell: echo "Hi! Welcome to wormhole team!!"
+- name: SHOW VERSION
+  hosts: host1
+  gather_facts: true
+  connection: network_cli
+
+  tasks:
+    - name: run the command 'show version'
+      ios_command:
+        commands: show version
+
+  fail_when:
+      "ansible_net_model" != {{device_model}} or
+      "ansible_net_serialnum" != {{device_serial_num}} or 
+      "ansible_net_version" != {{device_image_version }}
+
