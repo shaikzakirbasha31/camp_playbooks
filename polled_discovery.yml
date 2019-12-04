@@ -12,7 +12,6 @@
   -
     set_fact:
       intf: |
-        - {{printout.stdout | map('regex_findall', '(?:[0-9].+\/32)') |
-        list }}
+        - {{printout.stdout | map('regex_findall', '(?:[0-9].+\/32)')}}
   - debug:
       msg: "{{intf | to_json }}"
