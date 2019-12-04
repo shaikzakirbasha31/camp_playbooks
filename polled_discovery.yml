@@ -16,4 +16,3 @@
         list }}
   - debug:
       msg: "{{intf | to_json }}"
-      with_list: "{{ nested_list }}"
