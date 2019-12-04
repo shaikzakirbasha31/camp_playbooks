@@ -15,4 +15,4 @@
         - {{printout.stdout | map('regex_findall', '(?:[0-9].+\/32)') |
         list }}
   - debug:
-      msg_zakir: "{{intf | to_json }}"
+      msg: "{{intf | to_json }}"
