@@ -1,16 +1,52 @@
 ---
-
-- name: SHOW VERSION
+- name: Polled Discovery
   hosts: all
-  gather_facts: true
-  connection: network_cli
+  gather_facts: yes
+  connection: local
   vars:
-   creds:
-     host: "{{ansible_host}}"
-     username: "{{ansible_user}}"
-
+    envs:
+    - model_no : 'ISR4321'
+    - serial_no : 'FLM2321047A'
   tasks:
-    - ios_facts:
-        provider: "{{creds}}"
-    - debug:
-        var: ansible_net_model
+  - name: "Get interface list"
+    ios_command:
+      commands:
+        - "show license udi"
+    register: printout
+  -
+    set_fact:
+      intf: |
+        - {{printout.stdout | map('regex_findall', '([\w0-9?-]+)(?:\/(\w\d))\:([\w\d]+$)') | list }}
+  - debug:
+      msg: "{{intf}}"
+
+  - set_fact: result1=passed
+    when:  model_number in intf
+  - debug:
+      msg: "SUCCESS"
+    when: result1 is defined
+
+  - set_fact: result1=passed
+    when:  serial_number in intf
+  - debug:
+      msg: "SUCCESS 1"
+    when: result1 is defined
+
+  - name: "Get Version"
+    ios_command:
+      commands:
+        - "show version | inc Software"
+    register: output
+  -
+    set_fact:
+      vers: |
+        - {{output.stdout | map('regex_findall', '(?:(Cisco\sIOS\s[A-Za-z\s]*Software,\sVersion))\s(\d{2}.\d{2}.\d{2})') | list }}
+  - debug:
+      msg: "{{vers}}"
+
+  - set_fact: result1=passed
+    when:  image_version in vers
+  - debug:
+      msg: "SUCCESS"
+    when: result1 is defined
+
