@@ -21,7 +21,7 @@
       msg: "{{intf}}"
 
   - set_fact: result1=passed
-    failed_when:  model_nnumber not in intf
+    failed_when:  model_number not in intf
   - debug:
       msg: "SUCCESS"
     when: result1 is defined
