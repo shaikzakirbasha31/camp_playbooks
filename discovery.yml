@@ -5,8 +5,8 @@
   connection: local
   vars:
     envs:
-    - model_no : 'ISR4321'
-    - serial_no : 'FLM2321047A'
+    - model_no : 'ISR4331'
+    - serial_no : 'FLM2311047A'
   tasks:
   - name: "Get interface list"
     ios_command:
@@ -21,13 +21,13 @@
       msg: "{{intf}}"
 
   - set_fact: result1=passed
-    when:  model_number in intf
+    failed_when:  model_nnumber not in intf
   - debug:
       msg: "SUCCESS"
     when: result1 is defined
 
   - set_fact: result1=passed
-    when:  serial_number in intf
+    failed_when:  serial_number not in intf
   - debug:
       msg: "SUCCESS 1"
     when: result1 is defined
@@ -45,8 +45,7 @@
       msg: "{{vers}}"
 
   - set_fact: result1=passed
-    when:  image_version in vers
+    failed_when:  image_version not in vers
   - debug:
       msg: "SUCCESS"
     when: result1 is defined
-
